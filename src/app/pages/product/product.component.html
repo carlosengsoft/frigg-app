@@ -1,0 +1,43 @@
+<br />
+<br />
+<br />
+
+<div class="row col-md-12">
+  <div class="col-md-10">
+    <mat-tab-group mat-align-tabs="start">
+      <mat-tab label="Produto">
+
+        <br/>
+        
+        <div class="row col-md-12">
+          <div class="col-md-2 mr-3">
+            <mat-form-field>
+              <mat-label>Nome</mat-label>
+              <input matInput placeholder="" [(ngModel)]="product.name">
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-2 mr-3">
+            <mat-form-field>
+              <mat-label>Preço</mat-label>
+              <input matInput placeholder="" [(ngModel)]="product.price" [ngModelOptions]="{standalone: true}" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-4">
+            <mat-form-field style="width: 100%">
+              <mat-label>Notas</mat-label>
+              <input matInput placeholder="" [(ngModel)]="product.notes" [ngModelOptions]="{standalone: true}" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-md-2 mt-4">
+            <mat-checkbox [(ngModel)]="product.active">Ativo</mat-checkbox>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Estoque">Estoque</mat-tab>
+      <mat-tab label="Preço final">Content 3</mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
