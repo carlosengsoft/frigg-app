@@ -1,0 +1,74 @@
+<br />
+<div class="row col-md-12" style="display: flex; justify-content: center">
+
+  <div class="col-md-4">
+
+    <mat-card class="example-card" style="width: 100%; box-shadow: 0 23px 73px -2px rgba(0, 0, 0, 0.25);">
+      <div class="row" style="justify-content: center; height: 100px;">
+        <div style="position: relative; top: -108px;">
+          <img src="../../../assets/img/teste.png" />
+        </div>
+      </div>
+      <mat-card-content>
+        <br />
+        <br />
+
+
+        <div fxLayout="row" style="justify-content: center" fxLayoutGap="30px">
+          <div gdAlignColumns="start stretch">
+            <input type="email" placeholder="E-mail" [formControl]="emailFormControl" style="font-size: 12px" [(ngModel)]="user.username"
+              class="form-control form-fields" id="exampleFormControlInput1">
+            <mat-error class="ml-2 custom-mat-error"
+              *ngIf="emailFormControl.hasError('required') && emailFormControl.touched">
+              E-mail <strong>obrigatório</strong>
+            </mat-error>
+            <mat-error class="ml-2 custom-mat-error"
+              *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+              Por favor, digite um endereço de e-mail válido
+            </mat-error>
+            <br />
+            <br />
+
+            <input type="password" matInput [formControl]="passwordFormControl" class="form-control form-fields"
+              style="font-size: 12px" placeholder="Senha" [(ngModel)]="user.password">
+
+            <mat-error class="ml-2 custom-mat-error"
+              *ngIf="passwordFormControl.hasError('required') && passwordFormControl.touched">
+              Senha <strong>obrigatória</strong>
+            </mat-error>
+            <br />
+            <br />
+
+            <input type="password" matInput [formControl]="confirmPasswordFormControl" class="form-control form-fields"
+              style="font-size: 12px" placeholder="Confirmação de senha" [(ngModel)]="user.confirmPassword">
+            <mat-error class="ml-2 custom-mat-error"
+              *ngIf="confirmPasswordFormControl.hasError('required') && confirmPasswordFormControl.touched">
+              Confirmação de senha <strong>obrigatória</strong>
+            </mat-error>
+          </div>
+        </div>
+        <br />
+        <br />
+
+        <div fxLayout="row" style="justify-content: center; text-align: center" fxLayoutGap="30px">
+          <div gdAlignColumns="center stretch">
+            <button class="mr-3" [disabled]="(!emailFormControl.valid && emailFormControl.touched) 
+            || (!passwordFormControl.valid && passwordFormControl.touched) 
+            || (!confirmPasswordFormControl.valid && confirmPasswordFormControl.touched)" mat-raised-button
+              color="primary" (click)="createUser()">
+              <span *ngIf="!load">Cadastrar</span>
+              <div *ngIf="load" style="display: flex; align-items: center">
+                <span>Aguarde ...</span>
+                <mat-spinner class="ml-2" [diameter]="20"></mat-spinner>
+              </div>
+            </button>
+
+            <a class="form-link-create-account" [routerLink]="['/login']"> Entrar</a>
+
+          </div>
+        </div>
+        <br />
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

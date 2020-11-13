@@ -1,0 +1,64 @@
+<div class="row col-md-12" style="display: flex; justify-content: center">
+
+  <div class="col-md-4">
+    <br />
+
+    <mat-card class="example-card" style="width: 100%; box-shadow: 0 23px 73px -2px rgba(0, 0, 0, 0.25);">
+      <div class="row" style="justify-content: center; height: 100px;">
+        <div style="position: relative; top: -87px">
+          <img src="../../../assets/img/teste.png" />
+        </div>
+      </div>
+      <mat-card-content>
+        <br />
+        <br />
+        <br />
+
+
+        <div fxLayout="row" style="justify-content: center" fxLayoutGap="30px">
+          <div gdAlignColumns="start stretch">
+            <input type="email" [formControl]="emailFormControl" style="font-size: 12px"
+              [(ngModel)]="userLogin.username" class="form-control form-fields" id="exampleFormControlInput1"
+              placeholder="Digite seu e-mail">
+            <mat-error class="ml-2 custom-mat-error" *ngIf="emailFormControl.hasError('required') && emailFormControl.touched">
+              E-mail <strong>obrigatório</strong>
+            </mat-error>
+            <mat-error class="ml-2 custom-mat-error"
+              *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+              Por favor, digite um endereço de e-mail válido
+            </mat-error>
+            <br />
+            <br />
+
+            <input type="password" id="inputPassword" style="font-size: 12px" class="form-control form-fields"
+              placeholder="Sua senha" [formControl]="passwordFormControl" [(ngModel)]="userLogin.password" required>
+            <mat-error class="ml-2 custom-mat-error" *ngIf="passwordFormControl.hasError('required') && passwordFormControl.touched">
+              Senha <strong>obrigatória</strong>
+            </mat-error>
+            <br />
+
+          </div>
+        </div>
+        <br />
+        <br />
+
+        <div fxLayout="row" style="justify-content: center; text-align: center" fxLayoutGap="30px">
+          <div gdAlignColumns="center stretch">
+            <button mat-raised-button class="mr-3" [disabled]="(!emailFormControl.valid && emailFormControl.touched) 
+            || (!passwordFormControl.valid && passwordFormControl.touched)" color="primary" (click)="login()">
+              <span *ngIf="!load">Entrar</span>
+              <div *ngIf="load" style="display: flex; align-items: center">
+                <span>Aguarde ...</span>
+                <mat-spinner class="ml-2" [diameter]="20"></mat-spinner>
+              </div>
+            </button>
+
+            <a class="form-link-create-account" [routerLink]="['/sign-up']"> Criar conta</a>
+
+          </div>
+        </div>
+        <br />
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,19 +1,32 @@
-<nav class="navbar navbar-expand-lg" style="background-color: aliceblue">
-  <a class="navbar-brand" href="#">
-    <img src="assets/img/teste2.svg" width="23%" style="width: 130px"/>
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="#">Features</a>
-      <a class="nav-item nav-link" href="#">Pricing</a>
-      <a class="nav-item nav-link disabled" href="#">Disabled</a>
+<nav class="navbar navbar-expand-lg" style="background-color: #673ab7;">
+  <div class="row" style="display: flex; align-items: center">
+    <div class="col-sm-6">
+      <a class="navbar-brand" href="#" style="height: 100px; display: flex; align-items: center">
+        <img src="assets/img/logo2.svg" width="23%" style="width: 190px" />
+      </a>
+    </div>
+    <div class="col-sm-2 ml-4">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <span class="link-item">Menu</span>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>dialpad</mat-icon>
+          <span>Redial</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>book</mat-icon>
+          <span>
+            <a class="" [routerLink]="['/product']">Produtos</a>
+          </span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>arrow_back</mat-icon>
+          <span style="color: #6B59B7">Sair</span>
+        </button>
+      </mat-menu>
     </div>
   </div>
 </nav>
+
 <router-outlet></router-outlet>

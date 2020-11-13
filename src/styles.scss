@@ -2,3 +2,20 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.snackbar-state-success {
+    background-color: #3cad3c;
+}
+
+.snackbar-state-info {
+    background-color: #67b3b0;
+}
+.snackbar-state-failed {
+    background-color: #bd5959;
+}
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: white;
+}
+.custom-mat-error {
+    font-size: small;
+}

@@ -1,43 +1,260 @@
 <br />
-<br />
-<br />
 
 <div class="row col-md-12">
-  <div class="col-md-10">
-    <mat-tab-group mat-align-tabs="start">
-      <mat-tab label="Produto">
+  <div class="col-md-12">
+    <mat-tab-group>
 
-        <br/>
-        
-        <div class="row col-md-12">
-          <div class="col-md-2 mr-3">
-            <mat-form-field>
-              <mat-label>Nome</mat-label>
-              <input matInput placeholder="" [(ngModel)]="product.name">
-            </mat-form-field>
-          </div>
+      <mat-tab label="Novo produto">
+        <br />
+        <div class="row col-md-8">
 
-          <div class="col-md-2 mr-3">
-            <mat-form-field>
-              <mat-label>Preço</mat-label>
-              <input matInput placeholder="" [(ngModel)]="product.price" [ngModelOptions]="{standalone: true}" />
-            </mat-form-field>
-          </div>
+          <mat-horizontal-stepper linear #stepper style="width: 100%">
+            <mat-step>
+              <ng-template matStepLabel>Produto</ng-template>
 
-          <div class="col-md-4">
-            <mat-form-field style="width: 100%">
-              <mat-label>Notas</mat-label>
-              <input matInput placeholder="" [(ngModel)]="product.notes" [ngModelOptions]="{standalone: true}" />
-            </mat-form-field>
-          </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>* Nome</mat-label>
+                    <input matInput placeholder="" [formControl]="productNameFormControl"
+                      [(ngModel)]="productStep.product.name">
+                    <mat-error *ngIf="productNameFormControl.hasError('required') && productNameFormControl.touched">
+                      Nome <strong>obrigatório</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
 
-          <div class="col-md-2 mt-4">
-            <mat-checkbox [(ngModel)]="product.active">Ativo</mat-checkbox>
-          </div>
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>* Preço</mat-label>
+                    <input matInput placeholder="" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" (keyup)="calcTotalAndFinalPrice()" [formControl]="productPriceFormControl"
+                      [(ngModel)]="productStep.product.price" />
+                    <mat-error *ngIf="productPriceFormControl.hasError('required') && productPriceFormControl.touched">
+                      Preço <strong>obrigatório</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>Notas</mat-label>
+                    <input matInput placeholder="" [(ngModel)]="productStep.product.notes"
+                      [ngModelOptions]="{standalone: true}" />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-2 mt-4">
+                  <mat-checkbox [(ngModel)]="productStep.product.active">Ativo</mat-checkbox>
+                </div>
+              </div>
+
+              <br />
+              <br />
+
+              <div class="row">
+
+                <div class="col-md-4">
+                  <button mat-raised-button
+                    [disabled]="(!productNameFormControl.valid) || (!productPriceFormControl.valid)" color="primary"
+                    class="mr-2" (click)="create()">Salvar</button>
+                  <button mat-button matStepperNext>Próximo</button>
+                </div>
+
+              </div>
+
+            </mat-step>
+
+            <mat-step>
+              <ng-template matStepLabel>Estoque</ng-template>
+
+              <div class="row">
+
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>* Quantidade</mat-label>
+                    <input matInput type="number" placeholder="" [formControl]="stockQuantityFormControl" (keyup)="calcTotalPrice()"
+                      [(ngModel)]="productStep.stock.quantity">
+                    <mat-error
+                      *ngIf="stockQuantityFormControl.hasError('required') && stockQuantityFormControl.touched">
+                      Quantidade <strong>obrigatória</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>Valor total</mat-label>
+                    <input [disabled]="true" matInput currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" placeholder="" [(ngModel)]="totalPrice">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>Notas</mat-label>
+                    <input matInput placeholder="" [(ngModel)]="productStep.stock.notes" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <br />
+              <br />
+
+              <div class="row">
+                <div class="col-md-4">
+                  <button mat-raised-button [disabled]="(!stockQuantityFormControl.valid)" color="primary" class="mr-2"
+                    (click)="create()">Salvar</button>
+                  <button mat-button matStepperNext>Próximo</button>
+                </div>
+              </div>
+
+            </mat-step>
+
+            <mat-step>
+              <ng-template matStepLabel>Preço final</ng-template>
+
+              <div class="row">
+
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>Taxa %</mat-label>
+                    <input matInput type="number" placeholder="" (keyup)="calcFinalPrice()" [(ngModel)]="productStep.finalPrice.rate"
+                      [ngModelOptions]="{standalone: true}" />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>Taxa mão de obra %</mat-label>
+                    <input matInput type="number" placeholder="" (keyup)="calcFinalPrice()" [(ngModel)]="productStep.finalPrice.laborRate"
+                      [ngModelOptions]="{standalone: true}" />
+                  </mat-form-field>
+                </div>
+
+              </div>
+
+              <div class="row">
+
+                <!--
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>Preço</mat-label>
+                    <input matInput placeholder="" [(ngModel)]="prePrice" (keyup)="calcFinalPrice()"
+                      [ngModelOptions]="{standalone: true}" />
+                  </mat-form-field>
+                </div>
+                -->
+
+                <div class="col-md-3">
+                  <mat-form-field style="width: 100%">
+                    <mat-label>Preço final</mat-label>
+                    <input [disabled]="true" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }" matInput placeholder="" [(ngModel)]="productStep.finalPrice.price">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <br />
+              <br />
+
+              <div class="row">
+
+                <div class="col-md-4">
+                  <button mat-raised-button color="primary" class="mr-2" (click)="create()">Salvar</button>
+                  <button mat-button matStepperNext>Próximo</button>
+                </div>
+
+              </div>
+
+            </mat-step>
+
+          </mat-horizontal-stepper>
         </div>
       </mat-tab>
-      <mat-tab label="Estoque">Estoque</mat-tab>
-      <mat-tab label="Preço final">Content 3</mat-tab>
+
+      <mat-tab label="Produtos">
+
+        <br />
+
+
+        <div class="row col-md-12">
+          <div class="col-md-2"></div>
+          <div class="col-md-3">
+            <mat-form-field>
+              <mat-label>Nome</mat-label>
+              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="" #input>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row col-md-12">
+          <div class="col-md-1"></div>
+          <div class="col-md-11">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%">
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>Nome</th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef>Preço</th>
+                <td mat-cell *matCellDef="let element"> {{ element.price | currency:'BRL' }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="notes">
+                <th mat-header-cell *matHeaderCellDef>Notas</th>
+                <td mat-cell *matCellDef="let element"> {{ element.notes }} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="stock">
+                <th mat-header-cell *matHeaderCellDef>Estoque</th>
+                <td mat-cell *matCellDef="let element"> 
+                  <span *ngIf="element.stock.quantity">{{ element.stock.quantity }}</span> 
+                  <span *ngIf="!element.stock.quantity">- -</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="finalPrice">
+                <th mat-header-cell *matHeaderCellDef>Preço final</th>
+                <td mat-cell *matCellDef="let element">
+                  <span *ngIf="element.finalPrice.price">{{ element.finalPrice.price | currency:'BRL' }}</span>
+                  <span *ngIf="!element.finalPrice.price">- -</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="active">
+                <th mat-header-cell *matHeaderCellDef>Ativo</th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="badge-active" *ngIf="element.active == true">Ativo</span>
+                  <span class="badge-inactive" *ngIf="element.active == false">Inativo</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Ações</th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-mini-fab (click)="edit(element)" style="background-color: #9e9e9e">
+                    <mat-icon style="color: white">edit</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+              <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+            </table>
+          </div>
+
+          <div class="col-md-2"></div>
+
+        </div>
+
+        <br />
+
+      </mat-tab>
     </mat-tab-group>
   </div>
 </div>
